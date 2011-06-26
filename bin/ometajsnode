@@ -8,25 +8,34 @@ var usage = "Usage: ometajsnode <-C|-I|-P> <-g|--grammar grammar_file> [options]
 var help1 = [
     usage,
     "",
-    "Operational Modes:             Only one mode is supported at a time, last mode specified will be used",
-    "  -C                           Compile the program using provided grammar and compiler",
-    "  -I                           Interpret the program using provided grammar and interpreter",
-    "  -P                           Parse the program only, using the provided grammar",
+    "Operational Modes:                             Only one mode is supported at a time, last mode specified will be used",
+    "  -C                                           Compile the program using provided grammar and compiler",
+    "  -I                                           Interpret the program using provided grammar and interpreter",
+    "  -P                                           Parse the program only, using the provided grammar",
     ""
 ].join( '\n' );
 var help2 = [
     "Options:",
-    "  -c, --compiler <file>        Specifies compiler file to use",
-    "  --compiler-root <root>       Name of the root expression in the compiler grammar",
-    "  --debug                      Run in debug mode",
-    "  -g, --grammar <file>         Specifies grammar file to use",
-    "  -h, --help                   Displays this information",
-    "  -i, --interpreter <file>     Specifies interpreter file to use",
-    "  --interpreter-root <root>    Name of the root expression in the interpreter grammar",
-    "  -o, --output <file>          Place the output into file",
-    "  --parser-root <root>         Name of the root expression in the parser grammar",
-    "  --verbose                    Run in verbose mode",
-    "  --version                    Version"
+    "  -c, --compiler <file>                        Specifies compiler file to use",
+    "  --compiler-root <root>                       Name of the root expression in the compiler grammar",
+    "  --debug                                      Run in debug mode",
+    "  -g, --grammar <file>                         Specifies grammar file to use",
+    "  -h, --help                                   Displays this information",
+    "  -i, --interpreter <file>                     Specifies interpreter file to use",
+    "  --interpreter-root <root>                    Name of the root expression in the interpreter grammar",
+    "  -o, --output <file>                          Place the output into file",
+    "  --parser-root <root>                         Name of the root expression in the parser grammar",
+    ""
+].join( '\n' );
+var help3 = [
+    "  -u, --utility <module_file[,module_file]>    Specifies a list of modules that will be available for access by ometajs files via __Utilities",
+    "                                               Modules used as untilities must export 'utilityName' property to be read",
+    "                                               For example, my make-unique-ident module could look like:",
+    "                                                 exports.untilityName = 'make-unique-ident'",
+    "                                               Then any ometajs file could use it via __Utilities['make-unique-ident']",
+    "  --verbose                                    Run in verbose mode",
+    "  --version                                    Version",
+    ""
 ].join( '\n' );
 
 var ometajsnode = require( 'ometajsnode' );
@@ -69,7 +78,8 @@ while ( arg = argv.shift() ) {
       case 'help':
       case 'h':
         process.stdout.write( help1 );
-        process.stdout.write( help2 + '\n' );
+        process.stdout.write( help2 );
+        process.stdout.write( help3 + '\n' );
         process.exit( 0 );
         break;
       case 'I':
@@ -91,6 +101,11 @@ while ( arg = argv.shift() ) {
         break;
       case 'parser-root':
         options.rootParserExpression = argv.shift();
+        break;
+      case 'utility':
+      case 'u':
+        options.utilities = argv.shift();
+        options.utilities = options.utilities.split( ',' );
         break;
       case 'verbose':
         options.loglyMode = 'verbose';
@@ -147,7 +162,7 @@ if ( 'compile' == options.mode ) {
   ometajsnode.execute( 'compile', options.loglyMode, options.grammar, 
       options.input, options.compiler, undefined, options.output, 
       options.rootParserExpression, options.rootInterpreterExpression,
-      options.rootCompilerExpression);
+      options.rootCompilerExpression, options.utilities );
   
 } else if ( 'interpret' == options.mode ) {
   
@@ -160,7 +175,7 @@ if ( 'compile' == options.mode ) {
   ometajsnode.execute( 'interpret', options.loglyMode, options.grammar, 
       options.input, undefined, options.interpreter, options.output, 
       options.rootParserExpression, options.rootInterpreterExpression,
-      options.rootCompilerExpression);
+      options.rootCompilerExpression, options.utilities);
   
 } else if ( 'parse' == options.mode ) {
   
@@ -173,5 +188,5 @@ if ( 'compile' == options.mode ) {
   ometajsnode.execute( 'parse', options.loglyMode, options.grammar, 
       options.input, undefined, undefined, options.output, 
       options.rootParserExpression, options.rootInterpreterExpression,
-      options.rootCompilerExpression );
+      options.rootCompilerExpression, options.utilities );
 }
