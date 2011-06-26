@@ -1,0 +1,177 @@
+#!/usr/bin/env node
+
+var logly = require( 'logly' );
+
+logly.name('ometajsnode');
+    
+var usage = "Usage: ometajsnode <-C|-I|-P> <-g|--grammar grammar_file> [options] input_file";
+var help1 = [
+    usage,
+    "",
+    "Operational Modes:             Only one mode is supported at a time, last mode specified will be used",
+    "  -C                           Compile the program using provided grammar and compiler",
+    "  -I                           Interpret the program using provided grammar and interpreter",
+    "  -P                           Parse the program only, using the provided grammar",
+    ""
+].join( '\n' );
+var help2 = [
+    "Options:",
+    "  -c, --compiler <file>        Specifies compiler file to use (*.omc)",
+    "  --compiler-root <root>       Name of the root expression in the compiler grammar",
+    "  --debug                      Run in debug mode",
+    "  -g, --grammar <file>         Specifies grammar file to use (*.omg)",
+    "  -h, --help                   Displays this information",
+    "  -i, --interpreter <file>     Specifies interpreter file to use (*.omi)",
+    "  --interpreter-root <root>    Name of the root expression in the interpreter grammar",
+    "  -o, --output <file>          Place the output into file",
+    "  --parser-root <root>         Name of the root expression in the parser grammar",
+    "  --verbose                    Run in verbose mode",
+    "  --version                    Version"
+].join( '\n' );
+
+var ometajsnode = require( 'ometajsnode' );
+
+// Retrieve command-line parameters
+var arg, args = [], argv = process.argv.slice( 2 ),
+    options = {
+      input: [],
+      loglyMode: 'standard'
+    };
+
+// Parse command-line parameters
+while ( arg = argv.shift() ) {
+  if ( arg === __filename ) continue;
+  
+  if ( arg[ 0 ] !== '-' ) {
+    options.input.push( arg );
+  } else {
+    arg = arg.match( /^--?(.+)/ )[ 1 ];
+    
+    switch ( arg ) {
+      case 'C':
+        options.mode = 'compile';
+        break;
+      case 'compiler':
+      case 'c':
+        options.compiler = argv.shift();
+        break;
+      case 'compiler-root':
+        options.rootCompilerExpression = argv.shift();
+        break;
+      case 'debug':
+        options.loglyMode = 'debug';
+        logly.mode('debug');
+        break;
+      case 'grammar':
+      case 'g':
+        options.grammar = argv.shift();
+        break;
+      case 'help':
+      case 'h':
+        process.stdout.write( help1 );
+        process.stdout.write( help2 + '\n' );
+        process.exit( 0 );
+        break;
+      case 'I':
+        options.mode = 'interpret';
+        break;
+      case 'interpreter':
+      case 'i':
+        options.interpreter = argv.shift();
+        break;
+      case 'interpreter-root':
+        options.rootInterpreterExpression = argv.shift();
+        break;
+      case 'output':
+      case 'o':
+        options.output = argv.shift();
+        break;
+      case 'P':
+        options.mode = 'parse';
+        break;
+      case 'parser-root':
+        options.rootParserExpression = argv.shift();
+        break;
+      case 'verbose':
+        options.loglyMode = 'verbose';
+        logly.mode('verbose');
+        break;
+      case 'version':
+        // using console instead of logly cause we don't want ':'
+        console.log( "ometajsnode " + ometajsnode.version );
+        process.exit( 0 );
+        break;
+    }
+  }
+}
+
+// dump options in debug mode
+logly.debug( function() {
+  for ( option in options ) {
+    if ( !options.hasOwnProperty( option ) ) continue;
+    logly.debug( '[OPTION] ' + option + ": " + options[ option ] );
+  }
+});
+
+// Check that we have input files
+if ( options.input.length < 1 ) {
+  logly.log( "no input files" );
+  process.exit( 0 );
+}
+
+// Check that we specified we want to do something
+if ( !options.mode ) {
+  logly.log( "no operational mode specified\n" + usage );
+  process.exit( 0 );
+}
+
+// Verify that grammar is specified
+if ( !options.grammar ) {
+  logly.log( "no grammar specified\n" + usage );
+  process.exit( 0 );
+}
+
+// Execute the program
+if ( 'compile' == options.mode ) {
+  
+  // Verify we have a compiler and compiler-root specified if in compile mode
+  if ( !options.compiler ) {
+    logly.log( "no compiler specified for Compile mode\n" + usage );
+    process.exit( 0 );
+  }
+  if ( !options.rootCompilerExpression ) {
+    logly.log( "no compiler-root specified for Compile mode\n" + usage );
+    process.exit( 0 );
+  }
+  
+  ometajsnode.execute( 'compile', options.loglyMode, options.grammar, 
+      options.input, options.compiler, undefined, options.output, 
+      options.rootParserExpression, options.rootInterpreterExpression,
+      options.rootCompilerExpression);
+  
+} else if ( 'interpret' == options.mode ) {
+  
+  // Verify we have an interpreter-root specified if in interpreter mode
+  if ( !options.rootInterpreterExpression ) {
+    logly.log( "no interpreter-root specified for Interpreter mode\n" + usage );
+    process.exit( 0 );
+  }
+
+  ometajsnode.execute( 'interpret', options.loglyMode, options.grammar, 
+      options.input, undefined, options.interpreter, options.output, 
+      options.rootParserExpression, options.rootInterpreterExpression,
+      options.rootCompilerExpression);
+  
+} else if ( 'parse' == options.mode ) {
+  
+  //Verify we have a parser-root specified if in interpreter mode
+  if ( !options.rootParserExpression ) {
+    logly.log( "no parser-root specified for Parser mode\n" + usage );
+    process.exit( 0 );
+  }
+  
+  ometajsnode.execute( 'parse', options.loglyMode, options.grammar, 
+      options.input, undefined, undefined, options.output, 
+      options.rootParserExpression, options.rootInterpreterExpression,
+      options.rootCompilerExpression );
+}
