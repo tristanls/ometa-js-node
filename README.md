@@ -40,12 +40,13 @@ from the `bin` directory:
 `./ometajsnode -P -g ../examples/grammar_to_ir.ometajs --parser-root expr -o output.file ../examples/program.file ../examples/program2.file --debug`
 
 Let's breakdown that command step by step:
-`-P` sets `ometajsnode` into Parse mode, which will essentially output the Abstract Syntax Tree for each of the programs
-`-g ../examples/grammar_to_ir.ometajs` specifies the file containing ometajs grammar to use
-`--parser-root expr` specifies 'expr' as the root element of the grammar for the parser to try to match
-`-o output.file` specifies the file to which output will be written ( if `-o` is not present, output is directed to `stdout` )
-`../examples/program.file ../examples/program2.file` specifies two programs to process
-`--debug` sets mode to debug, which will display a lot of information detailing the execution process
+
+* `-P` sets `ometajsnode` into Parse mode, which will essentially output the Abstract Syntax Tree for each of the programs
+* `-g ../examples/grammar_to_ir.ometajs` specifies the file containing ometajs grammar to use
+* `--parser-root expr` specifies 'expr' as the root element of the grammar for the parser to try to match
+* `-o output.file` specifies the file to which output will be written ( if `-o` is not present, output is directed to `stdout` )
+* `../examples/program.file ../examples/program2.file` specifies two programs to process
+* `--debug` sets mode to debug, which will display a lot of information detailing the execution process
 
 #### Combined parser and interpreter example:
 
@@ -54,9 +55,10 @@ from the `bin` directory:
 `./ometajsnode -I -g ../examples/grammar_and_interpreter.ometajs --interpreter-root expr -o output.file ../examples/program.file ../examples/program2.file --verbose`
 
 This command is similar to the one above with some differences:
-`-I` sets `ometajsnode` into Interpret mode, which will actually interpret each of the programs and display the result
-`--interpreter-root expr` similarly to `--parser-root`, this specifies the root element of the grammar for the interpreter to try to match
-`--verbose` sets mode to verbose, which is not as detailed as `debug`, but will give you more detailed information
+
+* `-I` sets `ometajsnode` into Interpret mode, which will actually interpret each of the programs and display the result
+* `--interpreter-root expr` similarly to `--parser-root`, this specifies the root element of the grammar for the interpreter to try to match
+* `--verbose` sets mode to verbose, which is not as detailed as `debug`, but will give you more detailed information
 
 #### Parser to intermediate representation which then is interpreted example:
 
@@ -65,8 +67,9 @@ from the `bin` directory:
 `./ometajsnode -I -g ../examples/grammar_to_ir.ometajs --parser-root expr -i ../examples/interpreter.ometajs --interpreter-root interp -o output.file ../examples/program.file ../examples/program2.file --debug`
 
 We have little bit more going on here:
-`-i` in addition to `-g` which specified the grammar file, we add an interpreter file that will work with the output of parsing according to grammar file
-because we specified both a grammar and an interpreter, we need to provide both `--parser-root` and `--interpreter-root`
+
+* `-i` in addition to `-g` which specified the grammar file, we add an interpreter file that will work with the output of parsing according to grammar file
+* because we specified both a grammar and an interpreter, we need to provide both `--parser-root` and `--interpreter-root`
 
 Feedback
 ----
