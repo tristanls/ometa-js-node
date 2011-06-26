@@ -1,0 +1,43 @@
+ometa Compiler {
+  comp = [ 'num' anything:x ]     -> ( function() { 
+                                         __u = __Utilities[ 'utilities' ];
+                                         r = __u.getUniqueResult(); 
+                                         __u.resultStack.push( r ); 
+                                         return '%result'+r+' = i32 ' + x.toString() + '\n'; } )()
+       | [ 'add' comp:x comp:y ]  -> ( function() { 
+                                         __u = __Utilities[ 'utilities' ];
+                                         r2 = __u.resultStack.pop(); 
+                                         r1 = __u.resultStack.pop(); 
+                                         r = __u.getUniqueResult();
+                                         __u.resultStack.push( r );
+                                         i1 = __u.getUniqueIdent();
+                                         i2 = __u.getUniqueIdent();
+                                         return '' + x + '%'+i1+' = %result'+r1+'\n' + y + '%'+i2+' = %result'+r2+'\n' + '%result'+r+' = add i32 %'+i1+', %'+i2+'\n'; } )()
+       | [ 'sub' comp:x comp:y ]  -> ( function() { 
+                                         __u = __Utilities[ 'utilities' ];
+                                         r2 = __u.resultStack.pop();
+                                         r1 = __u.resultStack.pop();
+                                         r = __u.getUniqueResult();
+                                         __u.resultStack.push( r );
+                                         i1 = __u.getUniqueIdent();
+                                         i2 = __u.getUniqueIdent();
+                                         return '' + x + '%'+i1+' = %result'+r1+'\n' + y + '%'+i2+' = %result'+r2+'\n' + '%result'+r+' = sub i32 %'+i1+', %'+i2+'\n'; } )()
+       | [ 'mul' comp:x comp:y ]  -> ( function() { 
+                                         __u = __Utilities[ 'utilities' ];
+                                         r2 = __u.resultStack.pop();
+                                         r1 = __u.resultStack.pop();
+                                         r = __u.getUniqueResult();
+                                         __u.resultStack.push( r );
+                                         i1 = __u.getUniqueIdent();
+                                         i2 = __u.getUniqueIdent();
+                                         return '' + x + '%'+i1+' = %result'+r1+'\n' + y + '%'+i2+' = %result'+r2+'\n' + '%result'+r+' = mul i32 %'+i1+', %'+i2+'\n'; } )()
+       | [ 'div' comp:x comp:y ]  -> ( function() { 
+                                         __u = __Utilities[ 'utilities' ];
+                                         r2 = __u.resultStack.pop();
+                                         r1 = __u.resultStack.pop();
+                                         r = __u.getUniqueResult();
+                                         __u.resultStack.push( r );
+                                         i1 = __u.getUniqueIdent();
+                                         i2 = __u.getUniqueIdent();
+                                         return '' + x + '%'+i1+' = %result'+r1+'\n' + y + '%'+i2+' = %result'+r2+'\n' + '%result'+r+' = sdiv i32 %'+i1+', %'+i2+'\n'; } )()
+};

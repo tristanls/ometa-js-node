@@ -18,18 +18,17 @@ To learn more:
 
 About
 ----
-The goal of this project is to provide a tool-chain tool for easily working with OMetaJS. `ometajsnode` allows one to specify grammar file, interpreter file, ( in future also compiler files/modules ), and program files via command line, and offers a number of options of execution such as parse mode, interpreter mode, and compile mode.
+The goal of this project is to provide a tool-chain tool for easily working with OMetaJS. `ometajsnode` allows one to specify grammar, interpreter, and compiler files, utility modules, and program files via command line, and offers a number of options of linking them together into an execution chain such as parse mode, interpreter mode, and compile mode.
 
 Work in progress
 ----
-Incorporating compiler / code emitting code is going to get worked on soon.
 I'm not sure if packaging works with `npm` yet, but I'll get there.
 `stdin` input is not working yet.
 
 Usage
 ----
 
-Currently, parsing and interpreting works. See below walkthrough.
+Currently, parsing, interpreting, and "compiling" works. See below walkthrough.
 
 see usage via `./ometajsnode -h` or `./ometajsnode --help`
 
@@ -71,9 +70,19 @@ We have little bit more going on here:
 * `-i` in addition to `-g` which specified the grammar file, we add an interpreter file that will work with the output of parsing according to grammar file
 * because we specified both a grammar and an interpreter, we need to provide both `--parser-root` and `--interpreter-root`
 
+#### Parser to intermediate representation, then intermediate representation to "assembly" code example:
+
+from the `bin` directory:
+
+`./ometajsnode -C -g ../examples/grammar_to_ir.ometajs --parser-root expr -c ../examples/compiler.ometajs --compiler-root comp -o output.file -u example-utilities ../examples/program.file --debug`
+
+* `-C` indicates compile mode. I'm not yet sure this is named correctly, perhaps a more appropriate name would be emit mode. Nevertheless, in this example it uses `compiler.ometajs` to emit assembly-like code to a file
+* `-c ../examples/compiler.ometajs` specifies the OMetaJS compiler file
+* `-u example-utilities` specifies a comma separated list of utility modules (here only one) that `compiler.ometajs` uses in order to help it to generate "assembly". `ometajsnode` will attempt to `require('module name')` and will make it available to any `*.ometajs` files via `__Utilities[ <utilityName> ]`. `utilityName` must be exported by the module: `exports.utilityName = 'some name';
+
 Feedback
 ----
 
-I welcome your input and feedback.
+I am not quite convinced that the 'parse', 'interpret', 'compile' mode breakdown makes sense, I'm open to suggestions on how to better organize execution modes. And of course, I welcome any other input or feedback. 
 
 Cheers!
