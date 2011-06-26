@@ -16,12 +16,12 @@ var help1 = [
 ].join( '\n' );
 var help2 = [
     "Options:",
-    "  -c, --compiler <file>        Specifies compiler file to use (*.omc)",
+    "  -c, --compiler <file>        Specifies compiler file to use",
     "  --compiler-root <root>       Name of the root expression in the compiler grammar",
     "  --debug                      Run in debug mode",
-    "  -g, --grammar <file>         Specifies grammar file to use (*.omg)",
+    "  -g, --grammar <file>         Specifies grammar file to use",
     "  -h, --help                   Displays this information",
-    "  -i, --interpreter <file>     Specifies interpreter file to use (*.omi)",
+    "  -i, --interpreter <file>     Specifies interpreter file to use",
     "  --interpreter-root <root>    Name of the root expression in the interpreter grammar",
     "  -o, --output <file>          Place the output into file",
     "  --parser-root <root>         Name of the root expression in the parser grammar",
