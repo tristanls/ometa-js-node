@@ -1,2 +1,0 @@
-[mul, [num, 6], [add, [num, 4], [num, 3]]]
-[add, [div, [sub, [num, 16], [num, 6]], [mul, [num, 6], [add, [num, 4], [num, 3]]]], [mul, [div, [num, 22], [num, 3]], [add, [add, [num, 17], [num, 9]], [num, 3]]]]
