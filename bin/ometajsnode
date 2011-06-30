@@ -2,7 +2,7 @@
 
 var logly = require( 'logly' );
 
-logly.name('ometajsnode');
+logly.name( 'ometajsnode' );
     
 var usage = "Usage: ometajsnode <-C|-I|-P> <-g|--grammar grammar_file> [options] input_file";
 var help1 = [

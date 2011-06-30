@@ -1,0 +1,96 @@
+#!/usr/bin/env node
+
+var spawn = require( 'child_process' ).spawn;
+var logly = require( 'logly' );
+
+logly.name( 'ometajsnode_test_runner' );
+
+var usage = "Usage: ometajsnode_test_runner [options]";
+var help = [
+    usage,
+    "",
+    "Options:",
+    "  -d <directory[,directory...]>    Specifies the spec directories to test, ",
+    "                                   directories are relative to project root",
+    "  -h, --help                       Displays this information",
+    ""
+].join( '\n' );
+
+// Retrieve command-line parameters
+var arg, args = [], argv = process.argv.slice( 2 );
+var options = {};
+
+// Parse command-line parameters
+while ( arg = argv.shift() ) {
+  if ( arg === __filename ) continue;
+  
+  arg = arg.match( /^--?(.+)/ )[ 1 ];
+  
+  switch ( arg ) {
+    case 'd':
+      options.dirs = argv.shift();
+      options.dirs = options.dirs.split( ',' );
+      break;
+    case 'help':
+    case 'h':
+      process.stdout.write( help );
+      process.exit( 0 );
+      break;
+  }
+}
+
+/*
+ * Run all specs
+ * 
+ * This is provided as a wrapper so that we don't have to do crazy
+ * gymnastics figuring out what current working directory is and such.
+ * We set runners working directory to project root
+ */
+var childProcessCount = 0;
+
+if ( options.dirs ) {
+  
+  for ( var i = 0; i < options.dirs.length; i++ ) {
+    var runner = spawn( 
+        'node', ['node_modules/jasmine-node/lib/jasmine-node/cli.js', options.dirs[ i ] ],
+        { cwd: process.cwd() + '/..' });
+    
+    childProcessCount++;
+      
+    runner.stdout.on( 'data', function( data ) {
+      process.stdout.write( data );
+    });
+      
+    runner.stderr.on( 'data', function( data ) {
+      process.stderr.write( data );
+    });
+      
+    runner.on( 'exit', function( code ) {
+      childProcessCount--;
+      if ( childProcessCount <= 0 ) {
+        process.exit( code );
+      }
+    });
+  }
+} else {
+  var runner = spawn( 
+    'node', ['node_modules/jasmine-node/lib/jasmine-node/cli.js', 'spec'],
+    { cwd: process.cwd() + '/..' });
+  
+  childProcessCount++;
+  
+  runner.stdout.on( 'data', function( data ) {
+    process.stdout.write( data );
+  });
+  
+  runner.stderr.on( 'data', function( data ) {
+    process.stderr.write( data );
+  });
+  
+  runner.on( 'exit', function( code ) {
+    childProcessCount--;
+    if ( childProcessCount <= 0 ) {
+      process.exit( code );
+    }
+  });
+}
