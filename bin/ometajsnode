@@ -22,7 +22,7 @@ var help2 = [
     ""
 ].join( '\n' );
 var help3 = [
-    "  --pipe                                       Pipe mode, expect stdin to be parse object represented as JSON string (instead of a program)",
+    "  --pipe-in                                    Pipe mode, expect stdin to be parse object represented as JSON string (instead of a program)",
     "  -u, --utility <module_file[,module_file]>    Specifies a list of modules that will be available for access by ometajs files via __Utilities",
     "                                               Modules used as untilities must export 'utilityName' property to be read",
     ""
@@ -85,7 +85,7 @@ while ( arg = argv.shift() ) {
       case 'o':
         options.output = argv.shift();
         break;
-      case 'pipe':
+      case 'pipe-in':
         options.pipe = true;
         break;
       case 'utility':

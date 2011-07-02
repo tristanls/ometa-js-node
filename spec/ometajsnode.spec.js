@@ -101,7 +101,7 @@ describe( 'ometajsnode', function() {
   });
   
   it( 'should parse piped output ["mul",["num",6],["add",["num",4],["num",3]]] from stdin using interpreter.ometajs and output to stdout', function() {
-    exec( 'echo \'["mul",["num",6],["add",["num",4],["num",3]]]\' | ./bin/ometajsnode -g ./spec/data/interpreter.ometajs --grammar-match interp --pipe',
+    exec( 'echo \'["mul",["num",6],["add",["num",4],["num",3]]]\' | ./bin/ometajsnode -g ./spec/data/interpreter.ometajs --grammar-match interp --pipe-in',
       function( error, stdout, stderr ) {
         expect( stderr ).toEqual( '' );
         expect( stdout ).toEqual( '42' );
@@ -111,7 +111,7 @@ describe( 'ometajsnode', function() {
   });
   
   it( 'should parse piped output ["mul",["num",6],["add",["num",4],["num",3]]] from stdin using interpreter.ometajs and output to file', function() {
-    exec( 'echo \'["mul",["num",6],["add",["num",4],["num",3]]]\' | ./bin/ometajsnode -g ./spec/data/interpreter.ometajs --grammar-match interp --pipe -o ./spec/data/tmp/output.3.file',
+    exec( 'echo \'["mul",["num",6],["add",["num",4],["num",3]]]\' | ./bin/ometajsnode -g ./spec/data/interpreter.ometajs --grammar-match interp --pipe-in -o ./spec/data/tmp/output.3.file',
       function( error, stdout, stderr ) {
         expect( stderr ).toEqual( '' );
 
@@ -131,7 +131,7 @@ describe( 'ometajsnode', function() {
   });
   
   it( 'should parse intermediate representation ["mul",["num",6],["add",["num",4],["num",3]]] from ir.file using interpreter.ometajs and output to stdout', function() {
-    exec( './bin/ometajsnode -g ./spec/data/interpreter.ometajs --grammar-match interp --pipe ./spec/data/ir.file',
+    exec( './bin/ometajsnode -g ./spec/data/interpreter.ometajs --grammar-match interp --pipe-in ./spec/data/ir.file',
       function( error, stdout, stderr ) {
         expect( stderr ).toEqual( '' );
         expect( stdout ).toEqual( '42' );
@@ -141,7 +141,7 @@ describe( 'ometajsnode', function() {
   });
   
   it( 'should parse intermediate representation ["mul",["num",6],["add",["num",4],["num",3]]] from ir.file using interpreter.ometajs and output to file', function() {
-    exec( './bin/ometajsnode -g ./spec/data/interpreter.ometajs --grammar-match interp --pipe -o ./spec/data/tmp/output.4.file ./spec/data/ir.file',
+    exec( './bin/ometajsnode -g ./spec/data/interpreter.ometajs --grammar-match interp --pipe-in -o ./spec/data/tmp/output.4.file ./spec/data/ir.file',
       function( error, stdout, stderr ) {
         expect( stderr ).toEqual( '' );
 
