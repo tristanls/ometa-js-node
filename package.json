@@ -1,0 +1,20 @@
+{ "name" : "ometajsnode"
+, "description" : "A command line tool for OMetaJS ( an object-oriented language for pattern matching )"
+, "version" : "1.0.0"
+, "homepage" : "https://github.com/tristanls/ometa-js-node"
+, "author" : "Tristan Slominski <tristan.slominski@gmail.com> (http://github.com/tristanls)"
+, "contributors" :
+  [ "Alessandro Warth <alexwarth@gmail.com> (http://awarth.blogspot.com/)",
+    "Sergey Berezhnoy <veged@mail.ru> (http://github.com/veged)" ]
+, "repository" :
+  { "type" : "git"
+  , "url" : "http://github.com/tristanls/ometa-js-node.git"
+  }
+, "bugs" :
+  { "web" : "http://github.com/tristanls/ometa-js-node/issues" }
+, "main" : "./node_modules/ometajsnode/ometajsnode.js"
+, "bin" : { "ometajsnode" : "./bin/ometajsnode" }
+, "engines" : { "node" : ">=v0.4.8" }
+, "licenses" :
+  [ { "type" : "AS IS" } ]
+}
