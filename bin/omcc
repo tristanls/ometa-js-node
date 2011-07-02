@@ -2,9 +2,9 @@
 
 var logly = require( 'logly' );
 
-logly.name( 'ometajsnode' );
+logly.name( 'omcc' );
     
-var usage = "Usage: ometajsnode <-g|--grammar grammar_file> <--grammar-match expr_to_match> [options] input_file";
+var usage = "Usage: omcc <-g|--grammar grammar_file> <--grammar-match expr_to_match> [options] input_file";
 var help1 = [
     usage,
     "",
@@ -99,7 +99,7 @@ while ( arg = argv.shift() ) {
         break;
       case 'version':
         // using console instead of logly cause we don't want ':'
-        console.log( "ometajsnode " + ometajsnode.version );
+        console.log( "omcc " + ometajsnode.version );
         process.exit( 0 );
         break;
     }

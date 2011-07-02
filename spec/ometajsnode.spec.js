@@ -1,24 +1,15 @@
 var exec = require( 'child_process' ).exec;
 var fs = require( 'fs' );
 
-describe( 'ometajsnode', function() {
+describe( 'omcc', function() {
   
-  var usageMessage = 'Usage: ometajsnode <-g|--grammar grammar_file> <--grammar-match expr_to_match> [options] input_file\n';
-  
-  it( 'should display version with --version option specified', function() {
-    exec('./bin/ometajsnode --version',
-      function( error, stdout, stderr ) {
-        expect( stdout ).toEqual( 'ometajsnode 0.2.0\n' );
-        asyncSpecDone();
-      });      
-    asyncSpecWait();
-  });
+  var usageMessage = 'Usage: omcc <-g|--grammar grammar_file> <--grammar-match expr_to_match> [options] input_file\n';
   
   it( 'should fail when no grammar is specified', function() {
-    exec( './bin/ometajsnode --grammar-match expr ./spec/data/program.file',
+    exec( './bin/omcc --grammar-match expr ./spec/data/program.file',
       function( error, stdout, stderr ) {
         expect( stderr ).toEqual( 
-            'ometajsnode[error]: no grammar specified\n' + usageMessage );
+            'omcc[error]: no grammar specified\n' + usageMessage );
         expect( stdout ).toEqual( '' );
         asyncSpecDone();
     });
@@ -26,10 +17,10 @@ describe( 'ometajsnode', function() {
   });
   
   it( 'should fail when no grammar-match is specified', function() {
-    exec( './bin/ometajsnode -g ./spec/data/grammar_to_ir.ometajs ./spec/data/program.file',
+    exec( './bin/omcc -g ./spec/data/grammar_to_ir.ometajs ./spec/data/program.file',
       function( error, stdout, stderr ) {
         expect( stderr ).toEqual( 
-            'ometajsnode[error]: no grammar-match expression specified\n' + 
+            'omcc[error]: no grammar-match expression specified\n' + 
             usageMessage );
         expect( stdout ).toEqual( '' );
         asyncSpecDone();
@@ -38,7 +29,7 @@ describe( 'ometajsnode', function() {
   });
   
   it( 'should parse program (6*(4+3)) from program.file using grammar_to_ir.ometajs and output to stdout', function() {
-    exec('./bin/ometajsnode -g ./spec/data/grammar_to_ir.ometajs --grammar-match expr ./spec/data/program.file',
+    exec('./bin/omcc -g ./spec/data/grammar_to_ir.ometajs --grammar-match expr ./spec/data/program.file',
       function( error, stdout, stderr ) {
         expect( stderr ).toEqual( '' );
         expect( stdout ).toEqual( '["mul",["num",6],["add",["num",4],["num",3]]]' );
@@ -48,7 +39,7 @@ describe( 'ometajsnode', function() {
   });
   
   it( 'should parse program (6*(4+3)) from program.file using grammar_to_ir.ometajs and output to file', function() {
-    exec('./bin/ometajsnode -g ./spec/data/grammar_to_ir.ometajs --grammar-match expr -o ./spec/data/tmp/output.1.file ./spec/data/program.file',
+    exec('./bin/omcc -g ./spec/data/grammar_to_ir.ometajs --grammar-match expr -o ./spec/data/tmp/output.1.file ./spec/data/program.file',
       function( error, stdout, stderr ) {
         // should be nothing on stdout
         expect( stdout ).toEqual( '' );
@@ -69,7 +60,7 @@ describe( 'ometajsnode', function() {
   });
   
   it( 'should parse program (6*(4+3)) from stdin using grammar_to_ir.ometajs and output to stdout', function() {
-    exec( "echo '(6*(4+3))' | ./bin/ometajsnode -g ./spec/data/grammar_to_ir.ometajs --grammar-match expr",
+    exec( "echo '(6*(4+3))' | ./bin/omcc -g ./spec/data/grammar_to_ir.ometajs --grammar-match expr",
       function( error, stdout, stderr ) {
         expect( stderr ).toEqual( '' );
         expect( stdout ).toEqual( '["mul",["num",6],["add",["num",4],["num",3]]]' );
@@ -79,7 +70,7 @@ describe( 'ometajsnode', function() {
   });
   
   it( 'should parse program (6*(4+3)) from stdin using grammar_to_ir.ometajs and output to file', function() {
-    exec( "echo '(6*(4+3))' | ./bin/ometajsnode -g ./spec/data/grammar_to_ir.ometajs --grammar-match expr -o ./spec/data/tmp/output.2.file",
+    exec( "echo '(6*(4+3))' | ./bin/omcc -g ./spec/data/grammar_to_ir.ometajs --grammar-match expr -o ./spec/data/tmp/output.2.file",
       function( error, stdout, stderr ) {
         // should be nothing on stdout
         expect( stdout ).toEqual( '' );
@@ -101,7 +92,7 @@ describe( 'ometajsnode', function() {
   });
   
   it( 'should parse piped output ["mul",["num",6],["add",["num",4],["num",3]]] from stdin using interpreter.ometajs and output to stdout', function() {
-    exec( 'echo \'["mul",["num",6],["add",["num",4],["num",3]]]\' | ./bin/ometajsnode -g ./spec/data/interpreter.ometajs --grammar-match interp --pipe-in',
+    exec( 'echo \'["mul",["num",6],["add",["num",4],["num",3]]]\' | ./bin/omcc -g ./spec/data/interpreter.ometajs --grammar-match interp --pipe-in',
       function( error, stdout, stderr ) {
         expect( stderr ).toEqual( '' );
         expect( stdout ).toEqual( '42' );
@@ -111,7 +102,7 @@ describe( 'ometajsnode', function() {
   });
   
   it( 'should parse piped output ["mul",["num",6],["add",["num",4],["num",3]]] from stdin using interpreter.ometajs and output to file', function() {
-    exec( 'echo \'["mul",["num",6],["add",["num",4],["num",3]]]\' | ./bin/ometajsnode -g ./spec/data/interpreter.ometajs --grammar-match interp --pipe-in -o ./spec/data/tmp/output.3.file',
+    exec( 'echo \'["mul",["num",6],["add",["num",4],["num",3]]]\' | ./bin/omcc -g ./spec/data/interpreter.ometajs --grammar-match interp --pipe-in -o ./spec/data/tmp/output.3.file',
       function( error, stdout, stderr ) {
         expect( stderr ).toEqual( '' );
 
@@ -131,7 +122,7 @@ describe( 'ometajsnode', function() {
   });
   
   it( 'should parse intermediate representation ["mul",["num",6],["add",["num",4],["num",3]]] from ir.file using interpreter.ometajs and output to stdout', function() {
-    exec( './bin/ometajsnode -g ./spec/data/interpreter.ometajs --grammar-match interp --pipe-in ./spec/data/ir.file',
+    exec( './bin/omcc -g ./spec/data/interpreter.ometajs --grammar-match interp --pipe-in ./spec/data/ir.file',
       function( error, stdout, stderr ) {
         expect( stderr ).toEqual( '' );
         expect( stdout ).toEqual( '42' );
@@ -141,7 +132,7 @@ describe( 'ometajsnode', function() {
   });
   
   it( 'should parse intermediate representation ["mul",["num",6],["add",["num",4],["num",3]]] from ir.file using interpreter.ometajs and output to file', function() {
-    exec( './bin/ometajsnode -g ./spec/data/interpreter.ometajs --grammar-match interp --pipe-in -o ./spec/data/tmp/output.4.file ./spec/data/ir.file',
+    exec( './bin/omcc -g ./spec/data/interpreter.ometajs --grammar-match interp --pipe-in -o ./spec/data/tmp/output.4.file ./spec/data/ir.file',
       function( error, stdout, stderr ) {
         expect( stderr ).toEqual( '' );
 
@@ -161,7 +152,7 @@ describe( 'ometajsnode', function() {
   });
   
   it( 'should parse program ((16-6)/(6*(4+3)))+((22/3)*(17+9+3)) from program2.file using grammar_to_ir.ometajs and output to stdout', function() {
-    exec( './bin/ometajsnode -g ./spec/data/grammar_to_ir.ometajs --grammar-match expr ./spec/data/program2.file',
+    exec( './bin/omcc -g ./spec/data/grammar_to_ir.ometajs --grammar-match expr ./spec/data/program2.file',
       function( error, stdout, stderr ) {
         expect( stdout ).toEqual( 
             '["add",["div",["sub",["num",16],["num",6]],' +
@@ -173,7 +164,7 @@ describe( 'ometajsnode', function() {
   });
   
   it( 'should parse program ((16-6)/(6*(4+3)))+((22/3)*(17+9+3)) from program2.file using grammar_to_ir.ometajs and output to file', function() {
-    exec('./bin/ometajsnode -g ./spec/data/grammar_to_ir.ometajs --grammar-match expr -o ./spec/data/tmp/output.5.file ./spec/data/program2.file',
+    exec('./bin/omcc -g ./spec/data/grammar_to_ir.ometajs --grammar-match expr -o ./spec/data/tmp/output.5.file ./spec/data/program2.file',
       function( error, stdout, stderr ) {
         // should be nothing on stdout
         expect( stdout ).toEqual( '' );
@@ -198,7 +189,7 @@ describe( 'ometajsnode', function() {
   });
   
   it( 'should parse program ((16-6)/(6*(4+3)))+((22/3)*(17+9+3)) from stdin using grammar_to_ir.ometajs and output to stdout', function() {
-    exec( "echo '((16-6)/(6*(4+3)))+((22/3)*(17+9+3))' | ./bin/ometajsnode -g ./spec/data/grammar_to_ir.ometajs --grammar-match expr",
+    exec( "echo '((16-6)/(6*(4+3)))+((22/3)*(17+9+3))' | ./bin/omcc -g ./spec/data/grammar_to_ir.ometajs --grammar-match expr",
       function( error, stdout, stderr ) {
         expect( stderr ).toEqual( '' );
         expect( stdout ).toEqual( 
@@ -211,7 +202,7 @@ describe( 'ometajsnode', function() {
   });
   
   it( 'should parse program ((16-6)/(6*(4+3)))+((22/3)*(17+9+3)) from stdin using grammar_to_ir.ometajs and output to file', function() {
-    exec( "echo '((16-6)/(6*(4+3)))+((22/3)*(17+9+3))' | ./bin/ometajsnode -g ./spec/data/grammar_to_ir.ometajs --grammar-match expr -o ./spec/data/tmp/output.6.file",
+    exec( "echo '((16-6)/(6*(4+3)))+((22/3)*(17+9+3))' | ./bin/omcc -g ./spec/data/grammar_to_ir.ometajs --grammar-match expr -o ./spec/data/tmp/output.6.file",
       function( error, stdout, stderr ) {
         // should be nothing on stdout
         expect( stdout ).toEqual( '' );

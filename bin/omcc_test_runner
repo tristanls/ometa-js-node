@@ -3,11 +3,11 @@
 var spawn = require( 'child_process' ).spawn;
 var logly = require( 'logly' );
 
-logly.name( 'ometajsnode_test_runner' );
+logly.name( 'omcc_test_runner' );
 
 var testRunnerDirname = __dirname;
 
-var usage = "Usage: ometajsnode_test_runner [options]";
+var usage = "Usage: omcc_test_runner [options]";
 var help = [
     usage,
     "",

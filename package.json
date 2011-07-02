@@ -1,11 +1,7 @@
-{ "name" : "ometajsnode"
+{ "name" : "omcc"
 , "description" : "A command line tool for Alessandro Warth's OMetaJS ( an object-oriented language for pattern matching )"
-, "version" : "1.0.1"
-, "keywords" : 
-  [ "ometajsnode",
-    "ometajs",
-    "ometa" ]
-, "maintainers" :
+, "version" : "1.0.3"
+, "author" :
   [ { "name" : "Tristan Slominski",
       "email" : "tristan.slominski@gmail.com",
       "web" : "http://github.com/tristanls" } ]
@@ -32,6 +28,6 @@
 , "dependencies" : []
 , "homepage" : "https://github.com/tristanls/ometa-js-node"
 , "main" : "./node_modules/ometajsnode/ometajsnode.js"
-, "bin" : { "ometajsnode" : "./bin/ometajsnode" }
+, "bin" : { "omcc" : "./bin/omcc" }
 , "engines" : { "node" : ">=v0.4.8" }
 }
