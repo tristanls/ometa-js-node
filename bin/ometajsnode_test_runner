@@ -5,6 +5,8 @@ var logly = require( 'logly' );
 
 logly.name( 'ometajsnode_test_runner' );
 
+var testRunnerDirname = __dirname;
+
 var usage = "Usage: ometajsnode_test_runner [options]";
 var help = [
     usage,
@@ -48,12 +50,16 @@ while ( arg = argv.shift() ) {
  */
 var childProcessCount = 0;
 
+var path = require( 'path' );
+
 if ( options.dirs ) {
   
   for ( var i = 0; i < options.dirs.length; i++ ) {
     var runner = spawn( 
-        'node', ['node_modules/jasmine-node/lib/jasmine-node/cli.js', options.dirs[ i ] ],
-        { cwd: process.cwd() + '/..' });
+        'node', 
+        [ path.join( __dirname, '/../node_modules/jasmine-node/lib/jasmine-node/cli.js' ), 
+          options.dirs[ i ] ],
+        { cwd: path.join( __dirname, '/..' ) });
     
     childProcessCount++;
       
@@ -74,8 +80,10 @@ if ( options.dirs ) {
   }
 } else {
   var runner = spawn( 
-    'node', ['node_modules/jasmine-node/lib/jasmine-node/cli.js', 'spec'],
-    { cwd: process.cwd() + '/..' });
+    'node', 
+    [ path.join( __dirname, '/../node_modules/jasmine-node/lib/jasmine-node/cli.js' ), 
+      'spec' ],
+    { cwd: path.join( __dirname, '/..' ) });
   
   childProcessCount++;
   
